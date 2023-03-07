@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant browser
+    participant server
+    
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    browser DOES sends user input to the server BUT not by default, instead through an event handler
+    data is sent in form of json object:
+    {
+      content: req.body.note,
+      date: new Date(),
+    }
+    the page is dynamically changed on the frontend w AJAX (handler), logic in handler manipulating the dom
+    in this case, with the submit, the input triggers an onsubmit handler, which will submit the info to the server so that on next render, the info is still in the list, but handler immediately manipulates DOM so that it repaints just that element, thus improving performance
+    server-->>browser: 201 (created) but not a redirect (back to the page to reload it)
+    browser DOES NOT reload /notes page
+    this is what makes it faster
+    the server sends back a simple message with code 201 and message created
+  
